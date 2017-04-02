@@ -27,6 +27,7 @@ class AirCargoProblem(Problem):
         """
         self.state_map = initial.pos + initial.neg
         self.initial_state_TF = encode_state(initial, self.state_map)
+        self.goal_state_TF = encode_state(FluentState(goal, []), self.state_map)
         Problem.__init__(self, self.initial_state_TF, goal=goal)
         self.cargos = cargos
         self.planes = planes
@@ -201,9 +202,8 @@ class AirCargoProblem(Problem):
         conditions by ignoring the preconditions required for an action to be
         executed.
         '''
-        # TODO implement (see Russell-Norvig Ed-3 10.2.3  or Russell-Norvig Ed-2 11.2)
-        count = 0
-        return count
+
+        return sum([(a == "T" and b == "F") for a, b in zip(self.goal_state_TF, node.state)])
 
 
 def air_cargo_p1() -> AirCargoProblem:
